@@ -67,7 +67,7 @@ export default function App() {
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
           onPress={handleSubmit}
         >
-          <Text style={styles.buttonText}>Derdimi Hallettim!</Text>
+          <Text style={styles.buttonText}>Derdini Sikeyim</Text>
         </Pressable>
       </View>
       {successVisible && (
