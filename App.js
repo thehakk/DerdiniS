@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Platform, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Animated, Platform, Pressable, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const SUCCESS_MESSAGE = 'Derdiniz başarıyla sikildi!';
 
@@ -47,42 +48,44 @@ export default function App() {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ExpoStatusBar style="dark" />
-      <StatusBar barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'} />
-      <View style={styles.container}>
-        <Text style={styles.header}>Sikilmesini istediğiniz derdinizi yazınız</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Derdinizi yazın..."
-          placeholderTextColor="#888"
-          value={problem}
-          onChangeText={setProblem}
-          multiline
-        />
-        <View style={styles.adBanner}>
-          <Text style={styles.adText}>Reklam Alanı</Text>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safeArea} edges={['top', 'right', 'bottom', 'left']}>
+        <ExpoStatusBar style="dark" />
+        <StatusBar barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'} />
+        <View style={styles.container}>
+          <Text style={styles.header}>Sikilmesini istediğiniz derdinizi yazınız</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Derdinizi yazın..."
+            placeholderTextColor="#888"
+            value={problem}
+            onChangeText={setProblem}
+            multiline
+          />
+          <View style={styles.adBanner}>
+            <Text style={styles.adText}>Reklam Alanı</Text>
+          </View>
+          <Pressable
+            style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+            onPress={handleSubmit}
+          >
+            <Text style={styles.buttonText}>Derdini Sikeyim</Text>
+          </Pressable>
         </View>
-        <Pressable
-          style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>Derdimi Hallettim!</Text>
-        </Pressable>
-      </View>
-      {successVisible && (
-        <Pressable
-          style={styles.overlay}
-          onPress={() => setSuccessVisible(false)}
-          android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
-        >
-          <Animated.View style={[styles.successContainer, animatedStyles]}>
-            <Text style={styles.successText}>{SUCCESS_MESSAGE}</Text>
-            <Text style={styles.successHint}>Dokunarak kapatabilirsiniz.</Text>
-          </Animated.View>
-        </Pressable>
-      )}
-    </SafeAreaView>
+        {successVisible && (
+          <Pressable
+            style={styles.overlay}
+            onPress={() => setSuccessVisible(false)}
+            android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
+          >
+            <Animated.View style={[styles.successContainer, animatedStyles]}>
+              <Text style={styles.successText}>{SUCCESS_MESSAGE}</Text>
+              <Text style={styles.successHint}>Dokunarak kapatabilirsiniz.</Text>
+            </Animated.View>
+          </Pressable>
+        )}
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
